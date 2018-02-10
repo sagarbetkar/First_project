@@ -1,0 +1,19 @@
+.main{
+	margin: 50px 15px;
+}
+.main-center{
+	margin-top: 30px;
+    margin: 0 auto;
+    padding: 10px 40px;
+}
+.form-control {
+    height: auto!important;
+    padding: 8px 12px !important;
+}
+body{
+	color: #636b6f;
+	font-family: Raleway,sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #636b6f;
+}
