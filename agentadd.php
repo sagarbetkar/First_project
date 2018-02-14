@@ -1,8 +1,24 @@
 <?php
+ include 'db.php'; //connect the connection page
+ session_start();
+if(!isset($_SESSION['usertype']))
+{
+   header("location: login.php");
+
+}
+$name=$_SESSION['usertype'];
+$id=$_SESSION['id'];
+$cid=$_SESSION['c_id'];
+
 /* Attempt MySQL server connection. Assuming you are running MySQL
 server with default setting (user 'root' with no password) */
 $link = mysqli_connect("localhost", "root", "", "tag8_local");
- 
+$query = "SELECT * FROM agent";
+$result = mysqli_query($link,$query);
+while($row = mysqli_fetch_assoc($result))
+{
+    $id1 = $row['id']+1;
+}
 // Check connection
 if($link === false){
     die("ERROR: Could not connect. " . mysqli_connect_error());
@@ -17,7 +33,7 @@ $contact_no = mysqli_escape_string($link, $_REQUEST['contact_no']);
 
  
 // attempt insert query execution
-$sql = "INSERT INTO agent (agent_code,agent_name,email_id,contact_no) VALUES ('$agent_code','$agent_name','$email_id','$contact_no')";
+$sql = "INSERT INTO agent (agent_code,agent_name,email_id,contact_no,u_id,c_id) VALUES ('$agent_code','$agent_name','$email_id','$contact_no','$id','$cid')";
 if(mysqli_query($link, $sql)){
     echo "Records added successfully.";
 } else{
@@ -51,7 +67,7 @@ $ship_zipcode = mysqli_real_escape_string($link, $_REQUEST['ship_zipcode']);
 
  
 // attempt insert query execution
-$sql = "INSERT INTO agent_shipping_address (shipping_company_name,ship_address,ship_city,ship_state,ship_country,ship_zipcode) VALUES ('$ship_company_name','$ship_address','$ship_city','$ship_state','$ship_country','$ship_zipcode')";
+$sql = "INSERT INTO agent_shipping_address (shipping_company_name,agent_id,ship_address,ship_city,ship_state,ship_country,ship_zipcode,u_id,c_id) VALUES ('$ship_company_name','$id1','$ship_address','$ship_city','$ship_state','$ship_country','$ship_zipcode','$id','$cid')";
 if(mysqli_query($link, $sql)){
     echo "Records added successfully.";
 } else{
@@ -85,7 +101,7 @@ $bill_zipcode = mysqli_real_escape_string($link, $_REQUEST['bill_zipcode']);
 
  
 // attempt insert query execution
-$sql = "INSERT INTO agent_billing_address (bill_company_name,bill_address,bill_city,bill_state,bill_country,bill_zipcode) VALUES ('$bill_company_name','$bill_address','$bill_city','$bill_state','$bill_country','$bill_zipcode')";
+$sql = "INSERT INTO agent_billing_address (agent_id,bill_company_name,bill_address,bill_city,bill_state,bill_country,bill_zipcode,u_id,c_id) VALUES ('$id1','$bill_company_name','$bill_address','$bill_city','$bill_state','$bill_country','$bill_zipcode','$id','$cid')";
 if(mysqli_query($link, $sql)){
     echo "Records added successfully.";
 } else{
@@ -134,7 +150,7 @@ $contact_no = mysqli_escape_string($link, $_REQUEST['contact_no']);
 $ship_address = mysqli_real_escape_string($link, $_REQUEST['ship_address']);
 $bill_address = mysqli_real_escape_string($link, $_REQUEST['bill_address']);
 
-$sql = "INSERT INTO agent_details (agent_code,agent_name,company_name,email_id,contact_no,ship_address,bill_address) VALUES ('$agent_code','$agent_name','$shipping_company_name','$email_id','$contact_no','$ship_address','$bill_address')";
+$sql = "INSERT INTO agent_details (agent_code,agent_name,company_name,email_id,contact_no,ship_address,bill_address,u_id,c_id) VALUES ('$agent_code','$agent_name','$shipping_company_name','$email_id','$contact_no','$ship_address','$bill_address','$id','$cid')";
 if(mysqli_query($link, $sql)){
     echo "Records added successfully.";
 } else{

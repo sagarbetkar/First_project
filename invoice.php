@@ -1,7 +1,16 @@
 <?php
 include ('db.php');
-$query="select id from order_details where dispatch_status='pending'";
-$que="SELECT * FROM invoice";
+session_start();
+if(!isset($_SESSION['usertype']))
+{
+   header("location: login.php");
+
+}
+$name=$_SESSION['usertype'];
+$id=$_SESSION['id'];
+$cid=$_SESSION['c_id'];
+$query="SELECT order_id FROM order_details WHERE c_id ='$cid' and dispatch_status='pending' ";
+$que="SELECT * FROM invoice where c_id='$cid'";
 $result=mysqli_query($con,$query);
 $res=mysqli_query($con,$que);
 
@@ -72,12 +81,14 @@ $res=mysqli_query($con,$que);
                 <th>Order Id</th>
                 <th>File Name</th>
                 <th>Path</th>
+                <th>Order Dispatch Status</th>
+                <th>Order Invoice Status</th>
               </tr>
             </thead>
             <?php
             while($rows=mysqli_fetch_assoc($res))
             {
-              $id=$rows['order_id'];
+              $id1=$rows['order_id'];
               $o_id=$rows['id'];
               $name=$rows['name'];
               $date=$rows['date'];
@@ -88,9 +99,11 @@ $res=mysqli_query($con,$que);
               <td><?php echo $o_id; ?></td>
               <td><?php echo $name; ?></td>
               <td><?php echo $date; ?></td>
-              <td><?php echo $id;?></td>
+              <td><?php echo $id1;?></td>
               <td><?php echo $file_name; ?></td>
               <td><button><a href="<?php echo $rows['path']; ?>" target="_blank" class="button">View</a></button></td>
+              <td><select name="order_dropdown" class="form-control"><option value="">Select Order Status</option><option value="Pending">Pending</option><option value="Dispatched">Dispatched</option></select></td>
+              <td><select name="invoice_dropdown" class="form-control"><option value="">Select Invoice Status</option><option value="Pending">Pending</option><option value="Invoice Raised">Invoice Raised</option><option value="Complete">Complete</option></select></td>
             </tr>
             <?php
           }
@@ -120,13 +133,13 @@ $res=mysqli_query($con,$que);
   <?php
         while($row=mysqli_fetch_assoc($result))
         {
-          $id=$row['id'];
+          $id2=$row['order_id'];
           
 
         ?>
    <tr>     
       <td><input type="checkbox" name="techno[]" value="<?php echo $id;?>"></td>
-      <td><?php echo $id;?></td>  
+      <td><?php echo $id2;?></td>  
    </tr>  
    
    <?php 
@@ -135,7 +148,7 @@ $res=mysqli_query($con,$que);
    
    </table> 
    <div class="container">
-   <input id="input-7" name="pdf_file" type="file" class="file file-loading" accept="application/pdf"></p>
+   <input id="input-7" name="pdf_file" type="file" class="file file-loading" accept="application/pdf" required></p>
           <!--<input type="hidden" name="abc" value="<?php //echo $id;?>"> -->
           <input type="text" name="invoice_name"  placeholder="Add Invoice Name">
           <input type="submit" name="sub" class="btn btn-info" value="Upload" />
@@ -166,7 +179,7 @@ foreach($checkbox1 as $chk1)  // to get the checked items
    foreach ($checkbox1 as $key => $value) {
     # code...
    
-$in_ch=mysqli_query($con,"update order_details set invoice='$path',file_name='$upload_file',dispatch_status='dispatch' where id='$value'");  
+$in_ch=mysqli_query($con,"update order_details set invoice='$path',file_name='$upload_file',dispatch_status='dispatch' where order_id='$value'");  
 }
 if($in_ch==1)  
    {  
@@ -205,7 +218,8 @@ if(isset($_POST['sub']))
   $upload_file=$_FILES['pdf_file']['name'];
   $path="files1/invoice/".$upload_file;
   move_uploaded_file($_FILES['pdf_file']['tmp_name'],"files1/invoice/".$_FILES['pdf_file']['name']);
-$sql = "INSERT INTO invoice (order_id,name,file_name,path) VALUES ('$exampleEncoded','$invoice_name','$upload_file','$path')";
+$sql = "INSERT INTO invoice (order_id,name,file_name,path,c_id,u_id) VALUES ('$exampleEncoded','$invoice_name','$upload_file','$path','$cid','$id')";
+  var_dump($sql);
 if(mysqli_query($con, $sql)){
    // echo "Records added successfully.";
 } else{

@@ -1,6 +1,16 @@
 <?php
+  session_start();
+if(!isset($_SESSION['usertype']))
+{
+   header("location: login.php");
+
+}
+$name=$_SESSION['usertype'];
+$id=$_SESSION['id'];
+$cid=$_SESSION['c_id'];
 $con=mysqli_connect('localhost','root','','tag8_local')
     or die("connection failed".mysqli_errno());
+
 
 $request=$_REQUEST;
 $col =array(
@@ -22,7 +32,7 @@ $totalData=mysqli_num_rows($query);
 $totalFilter=$totalData;
 
 //Search
-$sql ="SELECT * FROM agent_details WHERE 1=1";
+$sql ="SELECT * FROM agent_details WHERE 1=1 and c_id='$cid' and u_id='$id'";
 if(!empty($request['search']['value'])){
     $sql.=" AND (id Like '".$request['search']['value']."%' ";
     $sql.=" OR agent_code Like '".$request['search']['value']."%' ";

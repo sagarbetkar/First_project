@@ -1,30 +1,55 @@
 <?php
-include 'connect.php'; //connect the connection page
-  
-if(empty($_SESSION)) // if the session not yet started 
-   session_start();
-if(!isset($_POST['submit'])) { // if the form not yet submitted
-   header("Location: login.php");
-   exit; 
+include('db.php');
+/*$con=mysql_connect("localhost","root","");
+if(!$con)
+{
+  echo"unabel to connect".mysql_error();
 }
-//check if the username entered is in the database.
-$test_query = "SELECT * FROM company WHERE username = '".$_POST[username]."'";
-$query_result = mysql_query($test_query);
-//conditions
-if(mysql_num_rows($query_result)==0) {
-//if username entered not yet exists
-    echo "The username you entered is invalid.";
-}else {
-//if exists, then extract the password.
-    while($row_query = mysql_fetch_array($query_result)) {
-        // check if password are equal
-        if($row_query['password']==$_POST['password']){
-            $_SESSION['password'] = $_POST['password'];
-            header("Location: home.php");
-            exit; 
-        } else{ // if not
-            echo "Invalid Password"; 
-        }
+$db=mysql_select_db("order _portal",$con);
+if(!$db)
+{
+  echo"database not found".mysql_error();
+}*/
+if(isset($_POST['submit'])){
+  $usertype=$_POST['usertype'];
+  $username=$_POST['username'];
+  $password=$_POST['pwd'];
+    $query="select username,password,usertype from user where username='$username' and password='$password' and usertype='$usertype'";
+    $result=mysqli_query($con,$query);
+    while ($row=mysqli_fetch_array($result)){
+      if($row['username']==$username && $row['password']==$password && $row['usertype']=='Admin'){
+        header("location: order_form.php");
+      }
+      elseif ($row['username']==$username && $row['password']==$password && $row['usertype']=='User') {
+        header("location: order_form.php");
+      }
+    } 
+    $sql="select id,c_id from user where username='$username' and password='$password' and usertype='$usertype'";  
+    $res=mysqli_query($con,$sql);
+    while($row=mysqli_fetch_assoc($res)){
+      $id=$row['id'];
+      $cid=$row['c_id'];
+
     }
+
+}
+
+
+//if(isset($_POST['submit']))
+/*$query="select id,cid from user";
+$result=mysqli_query($mysqli,$query);
+while($row=mysqli_fetch_assoc($result))
+        {
+          $id=$row['id'];
+          $cid=$row['cid'];
+        }
+*/       
+if(isset($_POST['usertype']))
+{
+  session_start();
+  $_SESSION['usertype']=$_POST['usertype'];
+  $_SESSION['id']=$id;
+  $_SESSION['c_id']=$cid;
+
 }
 ?>

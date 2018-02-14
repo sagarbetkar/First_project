@@ -1,8 +1,20 @@
 <?php
-include('db.php');
-$query="select * from order_details ORDER BY Id DESC";
-$result=mysqli_query($con,$query);
+include 'db.php'; //connect the connection page
+ session_start();
+if(!isset($_SESSION['usertype']))
+{
+   header("location: login.php");
 
+}
+$name=$_SESSION['usertype'];
+$id=$_SESSION['id'];
+$cid=$_SESSION['c_id'];
+//echo"$id";
+//echo "$cid";
+include('db.php');
+$query="select * from order_details where c_id = '$cid' ORDER BY order_id DESC";
+$result=mysqli_query($con,$query);
+//var_dump($query);
  ?>
 
 
@@ -83,7 +95,7 @@ $result=mysqli_query($con,$query);
 			 	<?php
 			 	while($row=mysqli_fetch_assoc($result))
 			 	{
-			 		$id=$row['Id'];
+			 		$id=$row['order_id'];
 			 		$date=$row['order_date'];
 			 		$agent_name=$row['agent_name'];
 			 		$agent_code=$row['agent_code'];

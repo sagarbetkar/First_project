@@ -8,7 +8,15 @@ while($row=mysqli_fetch_array($res))
 	$countries.push($row["name"])
 
 }*/
+session_start();
+if(!isset($_SESSION['usertype']))
+{
+   header("location: login.php");
 
+}
+$name=$_SESSION['usertype'];
+$id=$_SESSION['id'];
+$cid=$_SESSION['c_id'];
 ?>
 <!DOCTYPE html>
 <html>

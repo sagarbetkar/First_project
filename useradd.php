@@ -14,13 +14,14 @@ $first_name = mysqli_real_escape_string($link, $_REQUEST['first_name']);
 $last_name = mysqli_real_escape_string($link, $_REQUEST['last_name']);
 $contact_no = mysqli_escape_string($link, $_REQUEST['contact_no']);
 $emailid = mysqli_escape_string($link, $_REQUEST['emailid']);
+$company_name = mysqli_real_escape_string($link,$_REQUEST['company_name']);
 $usertype = mysqli_real_escape_string($link, $_REQUEST['usertype']);
 $username = mysqli_real_escape_string($link, $_REQUEST['username']);
 $password = mysqli_real_escape_string($link, $_REQUEST['password']);
 $status = mysqli_escape_string($link, $_REQUEST['status']);
 
 // attempt insert query execution
-$sql = "INSERT INTO user (first_name,last_name,contact_no,email,usertype,username,password,status) VALUES ('$first_name','$last_name','$contact_no','$emailid','$usertype','$username','$password','$status')";
+$sql = "INSERT INTO user (first_name,last_name,contact_no,email,usertype,username,password,c_id,status) VALUES ('$first_name','$last_name','$contact_no','$emailid','$usertype','$username','$password','$company_name','$status')";
 if(mysqli_query($link, $sql)){
     echo "Records added successfully.";
 } else{

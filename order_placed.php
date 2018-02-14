@@ -1,4 +1,12 @@
 <?php 
+session_start();
+if(!isset($_SESSION['usertype']))
+{
+   header("location: login.php");
+
+}
+$name=$_SESSION['usertype'];
+
 
 $link = mysqli_connect("localhost", "root", "", "tag8_local");
 
@@ -14,8 +22,10 @@ if($link === false){
     $bill_address =  mysqli_real_escape_string($link,$_REQUEST['bill_address']);
     $product= $_POST['product'];
     $quantity= $_POST['quantity'];
-   // $cproduct = count($_POST['product']);
+    $cproduct = count($_POST['product']);
     $cquantity = count($_POST['quantity']);
+    $id=$_SESSION['id'];
+$cid=$_SESSION['c_id'];
     print_r($_POST['product']);
    // print_r($cquantity);
     
@@ -24,7 +34,7 @@ if($link === false){
     {  
       for($x = 0; $x < $cproduct; $x++)
       {    
-        $values[] = '("' . $agent_name . '","' . $agent_code . '","' . $ship_address. '","' . $bill_address . '","' . $product[$x] . '","'. $quantity[$x] .'")'; 
+        $values[] = '("' . $agent_name . '","' . $agent_code . '","' . $ship_address. '","' . $bill_address . '","' . $product[$x] . '","'. $quantity[$x] .'","'.$id.'","'.$cid.'")'; 
        // print_r($product[$x]); 
       } 
     }
@@ -42,7 +52,7 @@ if($link === false){
     }*/
 
     
-    $sql = ("INSERT INTO order_details (agent_name, agent_code, ship_address, bill_address, product, quantity) VALUES " . implode(',', $values));
+    $sql = ("INSERT INTO order_details (agent_name, agent_code, ship_address, bill_address, product, quantity,u_id,c_id) VALUES " . implode(',', $values));
 
  
 
@@ -54,5 +64,5 @@ if(mysqli_query($link, $sql)){
 
 // close connection
 mysqli_close($link);
-header("location:order_form.php");
+//header("location:order_form.php");
 ?>

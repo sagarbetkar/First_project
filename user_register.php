@@ -79,6 +79,37 @@ include('db.php');
 			    	    			</div>
 			    	    		</div>
 			    	    		<div class="form-group">
+                                    <label for="registration" class="col-sm-3 control-label">Company</label>
+                                    <div class="col-sm-6">
+                                        <select name="company_name" class="form-control">
+                                			<option value=''>Select Company</option>
+                                
+                                <?php 
+                                $res=mysqli_query($con,"select * from company");
+                                while($row=mysqli_fetch_array($res))
+                                {
+                                    ?>
+                                    <option value="<?php echo $row["id"]; ?>"><?php echo $row["company_name"]; ?></option>
+
+                                    <?php
+                                }
+                                
+                                ?>
+
+                                		</select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="User Type" class="col-sm-3 control-label">User Type</label>
+                                    <div class="col-sm-6">
+                                        <select name="usertype" id="usertype" class="form-control">
+                                			<option value=''>Select User</option>                               
+                                			<option>Admin</option>
+                                			<option>User</option>                              
+                           				</select>
+                                    </div>
+                                </div>
+			    	    		<div class="form-group">
 			    	    			<label for="username" class="col-sm-3 control-label">Username</label>
 			    	    			<div class="col-sm-6">
 			    	    				<input type="text" name="username" id="username" class="form-control" value="" required>
@@ -88,15 +119,6 @@ include('db.php');
 			    	    			<label for="password" class="col-sm-3 control-label">Password</label>
 			    	    			<div class="col-sm-6">
 			    	    				<input type="password" name="password" id="password" class="form-control" value="" required>
-			    	    			</div>
-			    	    		</div>
-			    	    		<div class="form-group">
-			    	    			<label for="User Type" class="col-sm-3 control-label">User Type</label>
-			    	    			<div class="col-sm-6">
-			    	    				<select name="usertype" id="usertype" class="form-control">
-											<option value=''>Select User</option>					 <option>Admin</option>
-											<option>User</option>
-										</select>
 			    	    			</div>
 			    	    		</div>
 			    	    		<div class="form-group">
